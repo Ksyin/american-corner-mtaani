@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="American Corner Mtaani - Your Gateway to American Resources, Education & Opportunities at KNLS Nairobi, Kenya">
+    <meta name="theme-color" content="#0a2240">
+    <title>American Corner Mtaani | KNLS Nairobi</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+<!-- Updated Sticky Header -->
+<header class="topbar" id="header">
+    <div class="container">
+        <div class="topbar-inner">
+            
+            <!-- Logo -->
+            <a href="#" class="brand">
+                <img src="assets/images/American.PNG" alt="American Corner Mtaani" class="logo-img">
+                <div>
+                    <span>American Corner Mtaani</span>
+                    <small>KNLS Nairobi • American Spaces Kenya</small>
+                </div>
+            </a>
+
+            <!-- Navigation -->
+            <nav class="nav" id="main-nav">
+                <div class="nav-links" id="site-nav">
+                    <a href="#about">About Us</a>
+                    <a href="#events">Programs & Sign in</a>
+                    <a href="#resources">Resources</a>
+                    <a href="#gallery">Gallery</a>
+                    <!-- Updated Contact link to open modal (instead of #contact section) -->
+                    <a href="#" onclick="openContactModal(); return false;">Contact</a>
+                    
+                    <!-- Search Icon -->
+                    <a href="https://www.google.com/search?q=American+Spaces+Kenya" target="_blank" 
+                       class="nav-icon" title="Search American Spaces & U.S. Embassy Kenya" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </a>
+
+                    <!-- Staff Login Button -->
+                    <button class="btn-mini" onclick="navigateToStaffLogin()">
+                        <i class="fas fa-sign-in-alt"></i> 
+                        Staff Login
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                    <span class="burger"></span>
+                </button>
+            </nav>
+
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section with Background Video + QR Scanner Overlay -->
+<section class="hero" id="hero">
+    <div class="hero-bg">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/teach.mp4" type="video/mp4">
+            <!-- Add fallback formats for better browser support -->
+            <source src="assets/videos/your-video-file.webm" type="video/webm">
+            <!-- Fallback image if video fails to load -->
+            <img src="../assets/images/caro.jpg" alt="Background fallback">
+        </video>
+    </div>
+    <div class="hero-overlay"></div>
+    
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-flag-usa"></i>
+            <span>American Spaces Kenya</span>
+        </div>
+        <h2 class="hero-title">Welcome to American Corner Mtaani</h2>
+<h3 class="hero-tagline">CONNECT.CREATE.COLLABORATE</h3>
+    </div>
+    
+    <!-- ========== QR CODE SCANNER IMAGE - Fixed Position Overlay ========== -->
+    <div class="hero-qr-scanner" onclick="quickSignInWithQR()" title="Tap to scan QR code & sign in instantly">
+        <div class="qr-scanner-inner">
+            <div class="qr-pulse-ring"></div>
+            <img src="assets/images/me.jpeg" alt="QR Code Scanner - Quick Sign In" class="qr-scanner-image" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA%2Fviewform';">
+            <div class="qr-scanner-label">
+                <i class="fas fa-qrcode"></i>
+                <span>Quick Sign In</span>
+            </div>
+            <div class="qr-scan-line"></div>
+        </div>
+    </div>
+    
+    <div class="hero-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+            <path fill="#f8fafc" d="M0,50 C360,100 1080,0 1440,50 L1440,100 L0,100 Z"></path>
+        </svg>
+    </div>
+</section>
+
+<style>
+/* QR Scanner Overlay - Perfectly positioned on hero section */
+.hero-qr-scanner {
+    position: absolute;
+    bottom: 100px;
+    right: 40px;
+    z-index: 15;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: floatQR 3s ease-in-out infinite;
+}
+
+.qr-scanner-inner {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    padding: 14px 16px 12px 16px;
+    text-align: center;
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 0 4px rgba(34, 96, 169, 0.3);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-qr-scanner:hover .qr-scanner-inner {
+    transform: scale(1.05) translateY(-6px);
+    box-shadow: 0 28px 45px -12px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.4), 0 0 0 4px var(--primary-blue);
+}
+
+.hero-qr-scanner:active .qr-scanner-inner {
+    transform: scale(0.98);
+}
+
+.qr-scanner-image {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 6px;
+    border-radius: 20px;
+    background: white;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.qr-scanner-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--primary-navy, #0a2240);
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+}
+
+.qr-scanner-label i {
+    font-size: 1rem;
+    color: var(--primary-blue, #2260a9);
+}
+
+/* Scanning line animation */
+.qr-scan-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+    animation: scanMove 2s linear infinite;
+}
+
+/* Pulse ring effect */
+.qr-pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    border-radius: 28px;
+    background: transparent;
+    pointer-events: none;
+    animation: pulseRing 1.8s ease-out infinite;
+}
+
+/* Floating animation */
+@keyframes floatQR {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Scan line animation */
+@keyframes scanMove {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Pulse ring */
+@keyframes pulseRing {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34, 96, 169, 0.5);
+        opacity: 1;
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(34, 96, 169, 0);
+        opacity: 0.7;
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 96, 169, 0);
+        opacity: 0;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-qr-scanner {
+        bottom: 70px;
+        right: 20px;
+    }
+    
+    .qr-scanner-image {
+        width: 80px;
+        height: 80px;
+        padding: 6px;
+    }
+    
+    .qr-scanner-inner {
+        padding: 10px 12px 8px 12px;
+        border-radius: 22px;
+    }
+    
+    .qr-scanner-label {
+        font-size: 0.7rem;
+        gap: 4px;
+    }
+    
+    .qr-scanner-label i {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-qr-scanner {
+        bottom: 50px;
+        right: 12px;
+    }
+    
+    .qr-scanner-image {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .qr-scanner-inner {
+        padding: 8px 10px 6px 10px;
+    }
+    
+    .qr-scanner-label {
+        font-size: 0.65rem;
+    }
+}
+
+/* For tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .hero-qr-scanner {
+        bottom: 85px;
+        right: 30px;
+    }
+    
+    .qr-scanner-image {
+        width: 95px;
+        height: 95px;
+    }
+}
+</style>
+
+<script>
+// Quick sign-in function for QR scanner
+function quickSignInWithQR() {
+    // Direct sign-in form URL - opens instantly for fast check-in
+    const signInUrl = "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform";
+    window.open(signInUrl, '_blank');
+    
+    // Optional: Add a subtle haptic feedback simulation
+    const qrElement = document.querySelector('.hero-qr-scanner');
+    if (qrElement) {
+        qrElement.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            qrElement.style.transform = '';
+        }, 150);
+    }
+    
+    // Console log for tracking (optional)
+    console.log('QR Scanner clicked - Opening sign-in form for quick attendance');
+}
+</script>
+
+
+
+    <!-- Main Dashboard (now id="events" so Programs & Events nav scrolls here) -->
+    <!-- Main Dashboard -->
+<main class="dashboard" id="events">
+    <div class="dashboard-container">
+        <h2 class="dashboard-heading">What would you like to do today?</h2>
+        
+        <div class="cards-grid cards-grid-three">
+            <!-- Card 1: Sign In -->
+            <div class="dashboard-card" onclick="navigateToForm('signIn')" tabindex="0" role="button" aria-label="Sign In to American Corner">
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-clipboard-user card-icon"></i>
+                </div>
+                <h3 class="card-title">AC Mtaani Sign In</h3>
+                <p class="card-description">Register your visit today</p>
+                <div class="card-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Card 2: View Events -->
+            <div class="dashboard-card card-events" onclick="openEventsModal()" tabindex="0" role="button" aria-label="View Upcoming Events">
+                <div class="card-badge">New program!</div>
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-calendar-days card-icon"></i>
+                </div>
+                <h3 class="card-title">Upcoming Programs</h3>
+                <p class="card-description">Browse and RSVP for events</p>
+                <div class="card-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Card 3: Program Attendance -->
+            <div class="dashboard-card" onclick="navigateToForm('attendance')" tabindex="0" role="button" aria-label="Program Attendance">
+                <div class="card-badge">Program Attendance</div>
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-clipboard-check card-icon"></i>
+                </div>
+                <h3 class="card-title">Attendance</h3>
+                <p class="card-description">Record program attendance</p>
+                <div class="card-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Card 4: Feedback Card -->
+            <div class="dashboard-card" onclick="navigateToForm('feedback')" tabindex="0" role="button" aria-label="Provide Feedback">
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-comment-dots card-icon"></i>
+                </div>
+                <h3 class="card-title">Feedback</h3>
+                <p class="card-description">Share your experience with us</p>
+                <div class="card-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Card 5: Request and Return -->
+            <div class="dashboard-card" onclick="navigateToForm('request')" tabindex="0" role="button" aria-label="Request and Return Resources">
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-book-arrow-up card-icon"></i>
+                </div>
+                <h3 class="card-title">Request & Return</h3>
+                <p class="card-description">Borrow or return library resources</p>
+                <div class="card-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Card 6: Volunteer -->
+            <div class="dashboard-card" onclick="navigateToForm('volunteer')" tabindex="0" role="button" aria-label="Volunteer Opportunities">
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-handshake-angle card-icon"></i>
+                </div>
+                <h3 class="card-title">Volunteer</h3>
+                <p class="card-description">Join our volunteer program</p>
+                <div class="card-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+    <!-- NEW: About Us Section -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-globe-americas"></i>
+                    American Spaces • U.S. Embassy Nairobi
+                </div>
+                <h2 class="section-title">About American Corner Mtaani</h2>
+                <p class="section-subtitle">A vibrant U.S.-funded community hub at Kenya National Library Service (KNLS) Nairobi – Upper Hill</p>
+            </div>
+
+            <div class="about-grid">
+                <!-- Text Content -->
+                <div class="about-text">
+                    <p><strong>American Corner Mtaani</strong> is your local gateway to American resources, education, culture, and opportunities. Located inside the Kenya National Library Service (KNLS) Maktaba Kuu Building on Ngong Road, Upper Hill, Nairobi, it is one of several American Spaces across Kenya.</p>
+                    
+                    <p><strong>Fully funded by the American people</strong> through the U.S. Department of State and the U.S. Embassy Nairobi, we provide <strong>free access</strong> to information, technology, and programs that empower Kenyans to connect, create, and collaborate.</p>
+                    
+                    <div class="about-highlights">
+                        <div class="highlight-item">
+                            <i class="fas fa-hand-holding-heart"></i>
+                            <div>
+                                <h4>U.S.-Kenya Partnership</h4>
+                                <p>Bridging cultures and creating opportunities since the American Spaces program began.</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-laptop-code"></i>
+                            <div>
+                                <h4>Technology &amp; Innovation</h4>
+                                <p>Modern tech tools, maker spaces, and digital resources for the 21st century.</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <div>
+                                <h4>Education &amp; Skills</h4>
+                                <p>Free programs on entrepreneurship, leadership, English, career development &amp; more.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>Whether you’re a student, entrepreneur, researcher, teacher, or community leader — American Corner Mtaani is <strong>your space</strong> to learn, grow, and connect with the world.</p>
+                    
+                    <a href="#events" class="btn-primary">Explore Our Programs →</a>
+                </div>
+
+                <!-- Pictures / Visuals -->
+                <div class="about-visuals">
+                    <div class="visual-stack">
+                        <img src="assets/images/caro.jpg" alt="American Corner Mtaani Logo" class="about-img main-logo">
+
+<img src="assets/images/north.jpg" alt="Students using technology at American Corner" class="about-img">
+<img src="assets/images/U.S.jpg" alt="Community event at American Corner Mtaani" class="about-img">
+<img src="assets/images/mwingi.JPG" alt="3D printing workshop" class="about-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- NEW: Resources Section -->
+    <section id="resources" class="resources-section">
+        <div class="resources-container">
+            <div class="section-header">
+                <h2 class="section-title">Our Resources</h2>
+                <p class="section-subtitle">Free, modern technology and learning tools available to every visitor</p>
+            </div>
+
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Books &amp; eLibraryUSA</h3>
+                    <p>Physical library collection + full digital access to the largest U.S. government e-library with millions of books, journals, and research materials.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-wifi"></i></div>
+                    <h3>Free High-Speed Wi-Fi</h3>
+                    <p>Fast, reliable internet throughout the entire space — perfect for studying, job applications, and online learning.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-laptop"></i></div>
+                    <h3>Public Computers</h3>
+                    <p>Modern desktop stations with Microsoft Office, research tools, and printing/scanning services.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-tablet"></i></div>
+                    <h3>Chromebooks &amp; iPads</h3>
+                    <p>Borrowable tablets and laptops for on-site use — ideal for students and digital projects.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fab fa-apple"></i></div>
+                    <h3>Apple Workstations</h3>
+                    <p>High-performance Mac computers for video editing, graphic design, coding, and creative work.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-cube"></i></div>
+                    <h3>3D Printing Lab</h3>
+                    <p>Hands-on maker space with 3D printers — turn your ideas into real objects.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-microphone-alt"></i></div>
+                    <h3>Professional Podcasting Studio</h3>
+                    <p>State-of-the-art audio recording studio with microphones, soundproofing, and editing software.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h3>Study &amp; Meeting Spaces</h3>
+                    <p>Quiet reading areas, group collaboration rooms, and presentation equipment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Gallery Section (beautiful image catalogue) -->
+    <section id="gallery" class="gallery-section">
+        <div class="gallery-container">
+            <div class="section-header">
+                <h2 class="section-title">Gallery</h2>
+                <p class="section-subtitle">Moments of connection, creativity, and collaboration at American Corner Mtaani</p>
+            </div>
+
+          <div class="gallery-grid">
+    <!-- Image 1 -->
+    <div class="gallery-item">
+        <img src="assets/images/shop.JPG" alt="Students exploring technology">
+        <div class="gallery-overlay">
+            <h4>Digital Literacy Workshop</h4>
+            <p>Youth learning with Chromebooks &amp; iPads</p>
+        </div>
+    </div>
+    <!-- Image 2 -->
+    <div class="gallery-item">
+        <img src="assets/images/business.jpeg" alt="Entrepreneurship training">
+        <div class="gallery-overlay">
+            <h4>Business &amp; Entrepreneurship Training</h4>
+            <p>With BrighterMonday Kenya</p>
+        </div>
+    </div>
+    <!-- Image 3 -->
+    <div class="gallery-item">
+        <img src="assets/images/threed.jpg" alt="3D printing">
+        <div class="gallery-overlay">
+            <h4>3D Printing Lab in Action</h4>
+            <p>Prototyping and innovation</p>
+        </div>
+    </div>
+    <!-- Image 4 -->
+    <div class="gallery-item">
+        <img src="assets/images/mismumo.jpg" alt="Podcast studio">
+        <div class="gallery-overlay">
+            <h4>Podcasting Studio Session</h4>
+            <p>Recording stories and interviews</p>
+        </div>
+    </div>
+    <!-- Image 5 -->
+    <div class="gallery-item">
+        <img src="assets/images/moremzungu.JPG" alt="Community event">
+        <div class="gallery-overlay">
+            <h4>Cultural Exchange Event</h4>
+            <p>U.S.-Kenya friendship celebration</p>
+        </div>
+    </div>
+    <!-- Image 6 -->
+    <div class="gallery-item">
+        <img src="assets/images/desk.JPG" alt="Apple workstations">
+        <div class="gallery-overlay">
+            <h4>Apple Creative Workstation</h4>
+            <p>Design and video editing</p>
+        </div>
+    </div>
+    <!-- Image 7 -->
+    <div class="gallery-item">
+        <img src="assets/images/corner.jpg" alt="Library reading">
+        <div class="gallery-overlay">
+            <h4>Quiet Study Area</h4>
+            <p>Books &amp; focused learning</p>
+        </div>
+    </div>
+    <!-- Image 8 -->
+    <div class="gallery-item">
+        <img src="assets/images/teacher.JPG" alt="Group activity">
+        <div class="gallery-overlay">
+            <h4>Youth Leadership Program</h4>
+            <p>Team building and collaboration</p>
+        </div>
+    </div>
+    <!-- Image 9 -->
+    <div class="gallery-item">
+        <img src="assets/images/open.JPG" alt="Event crowd">
+        <div class="gallery-overlay">
+            <h4>American Corner Open Day</h4>
+            <p>Visitors enjoying free resources</p>
+        </div>
+    </div>
+</div>
+        </div>
+    </section>
+
+    <!-- Info Section (kept exactly as original) -->
+    <section class="info-section">
+        <div class="info-container">
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 8:00 AM - 5:00 PM</p>
+                <p>Saturday: 9:00 AM - 1:00 PM</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <h3>Location</h3>
+                <p>Maktaba Kuu Building</p>
+                <p>Ngong Road, Upper Hill, Nairobi</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fa-solid fa-wifi"></i>
+                </div>
+                <h3>Free Resources</h3>
+                <p>Free Wi-Fi • Computer Access</p>
+                <p>eLibraryUSA • Books & Media</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Modal (unchanged) -->
+    <div class="modal-overlay" id="eventsModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h2 id="modalTitle">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Upcoming Events
+                </h2>
+                <button class="modal-close" onclick="closeEventsModal()" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="eventsContainer">
+                <!-- Events will be dynamically inserted here -->
+            </div>
+            <div class="modal-footer">
+                <p>Select an event to register</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal (unchanged) -->
+    <div class="modal-overlay" id="contactModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal modal-contact" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+            <div class="modal-header">
+                <h2 id="contactModalTitle">
+                    <i class="fa-solid fa-phone"></i>
+                    Contact Us
+                </h2>
+                <button class="modal-close" onclick="closeContactModal()" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body contact-body">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="contact-info">
+                        <h4>Address</h4>
+                        <p>Kenya National Library Service (KNLS)</p>
+                        <p>Maktaba Kuu Building, Ngong Road</p>
+                        <p>Upper Hill, Nairobi, Kenya</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="contact-info">
+                        <h4>Phone</h4>
+                        <p><a href="tel:+254202739893">+254 20 273 9893</a></p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="contact-info">
+                        <h4>Email</h4>
+                        <p><a href="mailto:americancornermtaani@gmail.com">americancornermtaani@gmail.com</a></p>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/people/American-Corner-Mtaani/61565093887159/" target="_blank" rel="noopener" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/usembassykenya" target="_blank" rel="noopener" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://twitter.com/USEmbassyKenya" target="_blank" rel="noopener" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@USEmbassyNairobi" target="_blank" rel="noopener" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (unchanged) -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+          <img src="assets/images/American.PNG " alt="Thrive and Lead Summit Logo" class="logo-img" />
+                    <div>
+                        <h3>American Corner Mtaani</h3>
+                        <p>Part of American Spaces Kenya</p>
+                    </div>
+                </div>
+                 <div class="footer-brand">
+          <img src="assets/images/U.S.JPG  " alt="Thrive and Lead Summit Logo" class="logo-img" />
+                   
+                </div>
+
+ <div class="footer-brand">
+          <img src="assets/images/knls.PNG " alt="Thrive and Lead Summit Logo" class="logo-img" />
+                    
+                </div>
+
+                <div class="footer-social">
+                    <a href="https://web.facebook.com/people/American-Corner-Mtaani/61565093887159/" target="_blank" rel="noopener" aria-label="Facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/usembassykenya" target="_blank" rel="noopener" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://twitter.com/USEmbassyKenya" target="_blank" rel="noopener" aria-label="Twitter">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@USEmbassyNairobi" target="_blank" rel="noopener" aria-label="YouTube">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 American Spaces Kenya | U.S. Embassy Nairobi</p>
+                <p class="footer-tagline">Funded by the American people</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>

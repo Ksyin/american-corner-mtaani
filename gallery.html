@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gallery - American Corner Mtaani at KNLS Nairobi">
+    <meta name="theme-color" content="#0a2240">
+    <title>Gallery | American Corner Mtaani</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lightbox CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/gallery.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="topbar" id="header">
+        <div class="container">
+            <div class="topbar-inner">
+                <!-- Logo -->
+                <a href="index.html" class="brand">
+                    <img src="assets/images/American.PNG" alt="American Corner Mtaani" class="logo-img">
+                    <div>
+                        <span>American Corner Mtaani</span>
+                        <small>KNLS Nairobi • American Spaces Kenya</small>
+                    </div>
+                </a>
+
+                <!-- Navigation -->
+                <nav class="nav" id="main-nav">
+                    <div class="nav-links" id="site-nav">
+                        <a href="about.html">About Us</a>
+                        <a href="index.html#dashboard">Programs & Events</a>
+                        <a href="#resources">Resources</a>
+                        <a href="gallery.html" class="active">Gallery</a>
+                        <a href="#" onclick="openContactModal(); return false;">Contact</a>
+                        
+                        <!-- Search Icon -->
+                        <a href="#" onclick="openSearchModal(); return false;" class="nav-icon" title="Search">
+                            <i class="fas fa-search"></i>
+                        </a>
+
+                        <!-- Staff Login Button -->
+                        <button class="btn-mini" onclick="navigateToStaffLogin()">
+                            <i class="fas fa-sign-in-alt"></i> 
+                            Staff Login
+                        </button>
+                    </div>
+
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                        <span class="burger"></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Gallery Hero -->
+    <section class="gallery-hero">
+        <div class="gallery-hero-content">
+            <h1>Our Gallery</h1>
+            <p>Moments of Connection, Learning, and Cultural Exchange at American Corner Mtaani</p>
+        </div>
+    </section>
+
+    <!-- Gallery Filters -->
+    <section class="gallery-filters">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="events">Events & Programs</button>
+                <button class="filter-btn" data-filter="facility">Our Facility</button>
+                <button class="filter-btn" data-filter="community">Community</button>
+                <button class="filter-btn" data-filter="education">Education</button>
+                <button class="filter-btn" data-filter="culture">Cultural Exchange</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Facility Images -->
+                <div class="gallery-item" data-category="facility">
+                    <a href="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1200&q=80" data-lightbox="gallery" data-title="American Corner Mtaani - Main Reading Area">
+                        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80" alt="Main Reading Area">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Main Reading Area</span>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="gallery-item" data-category="facility">
+                    <a href="https://images.unsplash.com/photo-1583468982228-19f19164aee2?w=1200&q=80" data-lightbox="gallery" data-title="Computer Lab & Technology Center">
+                        <img src="https://images.unsplash.com/photo-1583468982228-19f19164aee2?w=400&q=80" alt="Computer Lab">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Computer Lab</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="facility">
+                    <a href="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1200&q=80" data-lightbox="gallery" data-title="Library Collection - American Literature">
+                        <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=400&q=80" alt="Library Collection">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Library Collection</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="facility">
+                    <a href="https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?w=1200&q=80" data-lightbox="gallery" data-title="Collaborative Learning Space">
+                        <img src="https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?w=400&q=80" alt="Collaborative Space">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Collaborative Space</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Event Images -->
+                <div class="gallery-item" data-category="events">
+                    <a href="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80" data-lightbox="gallery" data-title="Entrepreneurship Workshop">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80" alt="Entrepreneurship Workshop">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Entrepreneurship Workshop</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="events">
+                    <a href="https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&q=80" data-lightbox="gallery" data-title="Networking Event">
+                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&q=80" alt="Networking Event">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Networking Event</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="events">
+                    <a href="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&q=80" data-lightbox="gallery" data-title="Speaker Series">
+                        <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400&q=80" alt="Speaker Series">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Speaker Series</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Education Images -->
+                <div class="gallery-item" data-category="education">
+                    <a href="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&q=80" data-lightbox="gallery" data-title="EducationUSA Advising Session">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&q=80" alt="EducationUSA Advising">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>EducationUSA Advising</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="education">
+                    <a href="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&q=80" data-lightbox="gallery" data-title="STEM Workshop">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&q=80" alt="STEM Workshop">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>STEM Workshop</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="education">
+                    <a href="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&q=80" data-lightbox="gallery" data-title="English Language Classes">
+                        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&q=80" alt="English Classes">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>English Classes</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Community Images -->
+                <div class="gallery-item" data-category="community">
+                    <a href="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=80" data-lightbox="gallery" data-title="Community Gathering">
+                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80" alt="Community Gathering">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Community Gathering</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="community">
+                    <a href="https://images.unsplash.com/photo-1531845116688-48819b3b68d9?w=1200&q=80" data-lightbox="gallery" data-title="Volunteer Program">
+                        <img src="https://images.unsplash.com/photo-1531845116688-48819b3b68d9?w=400&q=80" alt="Volunteer Program">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Volunteer Program</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Cultural Exchange Images -->
+                <div class="gallery-item" data-category="culture">
+                    <a href="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80" data-lightbox="gallery" data-title="Film Screening Night">
+                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&q=80" alt="Film Screening">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Film Screening</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="culture">
+                    <a href="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1200&q=80" data-lightbox="gallery" data-title="Cultural Celebration">
+                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=400&q=80" alt="Cultural Celebration">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Cultural Celebration</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="culture">
+                    <a href="https://images.unsplash.com/photo-1505236858219-8359eb42e4d3?w=1200&q=80" data-lightbox="gallery" data-title="Art Exhibition">
+                        <img src="https://images.unsplash.com/photo-1505236858219-8359eb42e4d3?w=400&q=80" alt="Art Exhibition">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Art Exhibition</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Additional Facility Images -->
+                <div class="gallery-item" data-category="facility">
+                    <a href="https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=1200&q=80" data-lightbox="gallery" data-title="Study Area">
+                        <img src="https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=400&q=80" alt="Study Area">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Study Area</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="facility">
+                    <a href="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?w=1200&q=80" data-lightbox="gallery" data-title="Reception Area">
+                        <img src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?w=400&q=80" alt="Reception Area">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Reception Area</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Additional Event Images -->
+                <div class="gallery-item" data-category="events">
+                    <a href="https://images.unsplash.com/photo-1559223607-a43c990c692c?w=1200&q=80" data-lightbox="gallery" data-title="Career Fair">
+                        <img src="https://images.unsplash.com/photo-1559223607-a43c990c692c?w=400&q=80" alt="Career Fair">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Career Fair</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="gallery-item" data-category="events">
+                    <a href="https://images.unsplash.com/photo-1558008258-3256797ca4ae?w=1200&q=80" data-lightbox="gallery" data-title="Book Club Discussion">
+                        <img src="https://images.unsplash.com/photo-1558008258-3256797ca4ae?w=400&q=80" alt="Book Club">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Book Club</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="gallery-load-more">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <i class="fas fa-images"></i>
+                    Load More Images
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <img src="assets/images/American.PNG" alt="American Corner Mtaani" class="logo-img">
+                    <div>
+                        <h3>American Corner Mtaani</h3>
+                        <p>Part of American Spaces Kenya</p>
+                    </div>
+                </div>
+                <div class="footer-brand">
+                    <img src="assets/images/U.S.JPG" alt="U.S. Embassy" class="logo-img">
+                </div>
+                <div class="footer-brand">
+                    <img src="assets/images/knls.PNG" alt="KNLS" class="logo-img">
+                </div>
+                <div class="footer-social">
+                    <a href="https://web.facebook.com/people/American-Corner-Mtaani/61565093887159/" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/usembassykenya" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://twitter.com/USEmbassyKenya" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@USEmbassyNairobi" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 American Spaces Kenya | U.S. Embassy Nairobi</p>
+                <p class="footer-tagline">Funded by the American people</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div class="modal-overlay" id="contactModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal modal-contact">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-phone"></i> Contact Us</h2>
+                <button class="modal-close" onclick="closeContactModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body contact-body">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="contact-info">
+                        <h4>Address</h4>
+                        <p>KNLS, Maktaba Kuu Building, Ngong Road, Upper Hill, Nairobi</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div class="contact-info">
+                        <h4>Phone</h4>
+                        <p><a href="tel:+254202739893">+254 20 273 9893</a></p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div class="contact-info">
+                        <h4>Email</h4>
+                        <p><a href="mailto:americancornermtaani@gmail.com">americancornermtaani@gmail.com</a></p>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/people/American-Corner-Mtaani/61565093887159/" target="_blank">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/usembassykenya" target="_blank">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://twitter.com/USEmbassyKenya" target="_blank">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@USEmbassyNairobi" target="_blank">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="modal-overlay" id="searchModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal search-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-search"></i> Search</h2>
+                <button class="modal-close" onclick="closeSearchModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body search-body">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search American Spaces Kenya..." class="search-input">
+                    </div>
+                    <div class="search-options">
+                        <button class="search-option" onclick="searchGoogle()">
+                            <i class="fab fa-google"></i>
+                            Search Google
+                        </button>
+                        <button class="search-option" onclick="searchSite()">
+                            <i class="fas fa-globe"></i>
+                            Search This Site
+                        </button>
+                        <button class="search-option" onclick="searchEducationUSA()">
+                            <i class="fas fa-graduation-cap"></i>
+                            Search EducationUSA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>
