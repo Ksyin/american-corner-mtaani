@@ -91,18 +91,24 @@
       </div>
       
       <!-- ========== QR CODE SCANNER IMAGE - Updated to Cloudinary ========== -->
-      <div class="hero-qr-scanner" onclick="quickSignInWithQR()" title="Tap to scan QR code & sign in instantly">
-          <div class="qr-scanner-inner">
-              <div class="qr-pulse-ring"></div>
-              <!-- UPDATED: me.jpeg from Cloudinary, with fallback QR generation -->
-              <img src="https://res.cloudinary.com/dbw0uajxr/image/upload/v1744397805/me_zqkkqm.jpg" alt="QR Code Scanner - Quick Sign In" class="qr-scanner-image" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA%2Fviewform';">
-              <div class="qr-scanner-label">
-                  <i class="fas fa-qrcode"></i>
-                  <span>Quick Sign In</span>
-              </div>
-              <div class="qr-scan-line"></div>
-          </div>
-      </div>
+   <div class="hero-qr-scanner" onclick="quickSignInWithQR()" title="Tap to scan QR code & sign in instantly">
+    <div class="qr-scanner-inner">
+        <div class="qr-pulse-ring"></div>
+
+        <img 
+            src="https://res.cloudinary.com/dzghdog3m/image/upload/f_auto,q_auto/me_hxcpxz.jpg"
+            alt="QR Code Scanner - Quick Sign In"
+            class="qr-scanner-image"
+        >
+
+        <div class="qr-scanner-label">
+            <i class="fas fa-qrcode"></i>
+            <span>Quick Sign In</span>
+        </div>
+
+        <div class="qr-scan-line"></div>
+    </div>
+</div>
       
       <div class="hero-wave">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
