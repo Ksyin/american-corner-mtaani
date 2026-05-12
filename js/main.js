@@ -444,7 +444,7 @@ console.log('%c Dashboard v1.0.0 ', 'color: #2260a9; font-size: 12px;');
 console.log('Need help? Contact: americancornermtaani@gmail.com');
 // Staff Login Navigation (you can change the URL later)
 function navigateToStaffLogin() {
-    window.open("https://acmtaani-hub.lovable.com/", "_blank");
+    window.open("https://acmtaanihub.lovable.app/auth/", "_blank");
 }
 
 // Make sure mobile menu works with new structure
