@@ -24,49 +24,36 @@
 <body>
   <!-- Header -->
 <!-- Updated Sticky Header -->
+<!-- Header with Improved Hamburger Menu -->
 <header class="topbar" id="header">
     <div class="container">
         <div class="topbar-inner">
-            
-            <!-- Logo -->
             <a href="#" class="brand">
-<img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776930538/American_c0vlws.png" 
-     alt="QR Code Scanner - Quick Sign In" 
-     class="qr-scanner-image">                <div>
+                <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776930538/American_c0vlws.png" alt="Logo" class="logo-img">
+                <div>
                     <span>American Corner Mtaani</span>
                     <small>KNLS Nairobi • American Spaces Kenya</small>
                 </div>
             </a>
-
-            <!-- Navigation -->
+            
             <nav class="nav" id="main-nav">
                 <div class="nav-links" id="site-nav">
                     <a href="#about">About Us</a>
                     <a href="#events">Programs & Sign in</a>
                     <a href="#resources">Resources</a>
                     <a href="#gallery">Gallery</a>
-                    <!-- Updated Contact link to open modal (instead of #contact section) -->
                     <a href="#" onclick="openContactModal(); return false;">Contact</a>
-                    
-                    <!-- Search Icon -->
-                    <a href="https://www.google.com/search?q=American+Spaces+Kenya" target="_blank" 
-                       class="nav-icon" title="Search American Spaces & U.S. Embassy Kenya" aria-label="Search">
+                    <a href="https://www.google.com/search?q=American+Spaces+Kenya" target="_blank" class="nav-icon" title="Search">
                         <i class="fas fa-search"></i>
                     </a>
-
-                    <!-- Staff Login Button -->
                     <button class="btn-mini" onclick="navigateToStaffLogin()">
-                        <i class="fas fa-sign-in-alt"></i> 
-                        Staff Login
+                        <i class="fas fa-sign-in-alt"></i> Staff Login
                     </button>
                 </div>
-
-                <!-- Mobile Menu Toggle -->
                 <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
                     <span class="burger"></span>
                 </button>
             </nav>
-
         </div>
     </div>
 </header>
