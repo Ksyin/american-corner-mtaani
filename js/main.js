@@ -447,31 +447,14 @@ function navigateToStaffLogin() {
     window.open("https://acmtaanihub.lovable.app/auth/", "_blank");
 }
 
-// Improved Mobile Hamburger Menu
+// Make sure mobile menu works with new structure
 document.addEventListener('DOMContentLoaded', function() {
     const nav = document.querySelector('.nav');
     const toggle = document.getElementById('nav-toggle');
     
     if (nav && toggle) {
-        
-        // Toggle menu when hamburger is clicked
-        toggle.addEventListener('click', function(e) {
-            e.stopPropagation();
+        toggle.addEventListener('click', () => {
             nav.classList.toggle('open');
-        });
-
-        // Close menu when any link or button inside menu is clicked
-        document.querySelectorAll('.nav-links a, .nav-links button').forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('open');
-            });
-        });
-
-        // Close menu when clicking outside the menu
-        document.addEventListener('click', function(event) {
-            if (!nav.contains(event.target) && nav.classList.contains('open')) {
-                nav.classList.remove('open');
-            }
         });
     }
 });
