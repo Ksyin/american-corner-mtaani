@@ -37,7 +37,10 @@ const eventsData = [
         location: "KNLS Upper Hill, Nairobi",
         description: "Learn practical skills in Business Planning, Business Model Canvas, Customer Management & Growth Hacking. Get a mentorship certificate & job opportunities! KNLS in partnership with BrighterMonday Kenya.",
         category: "Entrepreneurship",
-        rsvpUrl: "https://docs.google.com/forms/d/19Vy74GI68ibyHoO0j8MrRng9MgQrbWC89ukxdyRWx1s/preview"
+        // TODO: replace with your actual raw GitHub URL for the poster, e.g.
+        // "https://raw.githubusercontent.com/USERNAME/REPO/main/images/Screenshot_20260710-122359.png"
+        image: "images/Screenshot_20260710-122359.png",
+        rsvpUrl: "https://forms.gle/9bu7kixT5fFNND"
     }
 ];
 
@@ -217,8 +220,14 @@ function filterUpcomingEvents(events) {
  * @returns {string} - HTML string for the event card
  */
 function createEventCard(event) {
+    const posterHTML = event.image ? `
+            <div class="event-poster">
+                <img src="${event.image}" alt="${escapeHtml(event.title)} poster" loading="lazy" />
+            </div>` : '';
+
     return `
         <div class="event-card">
+            ${posterHTML}
             <div class="event-header">
                 <div class="event-date-box">
                     <span class="month">${event.month}</span>
