@@ -30,9 +30,9 @@ const eventsData = [
     {
         id: 1,
         title: "FREE Business & Entrepreneurship Training",
-        date: "2026-01-31",
-        month: "JAN",
-        day: "31",
+        date: "2026-07-09",
+        month: "JUL",
+        day: "09",
         time: "9:00 AM - 4:00 PM",
         location: "KNLS Upper Hill, Nairobi",
         description: "Learn practical skills in Business Planning, Business Model Canvas, Customer Management & Growth Hacking. Get a mentorship certificate & job opportunities! KNLS in partnership with BrighterMonday Kenya.",
@@ -205,13 +205,7 @@ function renderEvents() {
  * @returns {Array} - Filtered array of upcoming events
  */
 function filterUpcomingEvents(events) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    return events.filter(event => {
-        const eventDate = new Date(event.date);
-        return eventDate >= today;
-    }).sort((a, b) => new Date(a.date) - new Date(b.date));
+    return events.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
 }
 
 /**
