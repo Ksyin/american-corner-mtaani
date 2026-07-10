@@ -37,9 +37,8 @@ const eventsData = [
         location: "KNLS Upper Hill, Nairobi",
         description: "Learn practical skills in Business Planning, Business Model Canvas, Customer Management & Growth Hacking. Get a mentorship certificate & job opportunities! KNLS in partnership with BrighterMonday Kenya.",
         category: "Entrepreneurship",
-        // TODO: replace with your actual raw GitHub URL for the poster, e.g.
-        // "https://raw.githubusercontent.com/USERNAME/REPO/main/images/Screenshot_20260710-122359.png"
-        image: "images/Screenshot_20260710-122359.png",
+        // Poster image - place this file in the same folder as index.html (or update path to match its actual location)
+        image: "https://res.cloudinary.com/ygairs70/image/upload/v1783676730/tech_program_uwhovv.png",
         rsvpUrl: "https://forms.gle/9bu7kixT5fFNND"
     }
 ];
