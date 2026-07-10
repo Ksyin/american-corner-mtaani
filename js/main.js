@@ -55,17 +55,117 @@ const eventsContainer = document.getElementById('eventsContainer');
 // =====================================================
 
 /**
+ * Convert a Google Form URL into an embeddable version.
+ * - "/viewform" links: add embedded=true so Google strips its own chrome.
+ * - "/preview" links: these are owner-only edit-preview links and will
+ *   NOT record real responses. We still embed them so they display,
+ *   but flag it in the console — swap these for the real public
+ *   "viewform" link from Google Forms > Send > Link.
+ * @param {string} url
+ * @returns {string}
+ */
+function toEmbeddableFormUrl(url) {
+    if (!url) return url;
+
+    if (url.includes('/preview')) {
+        console.warn('This form URL is an owner-only preview link and will not save responses:', url);
+    }
+
+    if (url.includes('embedded=true')) {
+        return url;
+    }
+
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}embedded=true`;
+}
+
+/**
+ * Open a form inline in the form modal (instead of a new tab)
+ * @param {string} url - The form URL
+ * @param {string} label - Friendly title shown in the modal header
+ */
+function openFormModal(url, label) {
+    if (!url) {
+        alert('This form is being set up. Please check back soon!');
+        return;
+    }
+
+    const formModal = document.getElementById('formModal');
+    const formIframe = document.getElementById('formIframe');
+    const formTitleText = document.getElementById('formModalTitleText');
+    const formLoading = document.getElementById('formLoading');
+
+    formTitleText.textContent = label || 'Form';
+    formLoading.classList.add('active');
+    formIframe.classList.remove('loaded');
+    formIframe.src = toEmbeddableFormUrl(url);
+
+    formModal.classList.add('active');
+    document.body.classList.add('modal-open');
+
+    const closeBtn = formModal.querySelector('.modal-close');
+    if (closeBtn) closeBtn.focus();
+
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+/**
+ * Close the form modal, reset the iframe, and land back on the homepage
+ */
+function closeFormModal() {
+    const formModal = document.getElementById('formModal');
+    const formIframe = document.getElementById('formIframe');
+
+    formModal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+    document.removeEventListener('keydown', handleEscapeKey);
+
+    // Stop the iframe and clear it so a re-open always starts fresh
+    formIframe.src = 'about:blank';
+
+    // Land back on the homepage/dashboard section
+    const homeSection = document.getElementById('events');
+    if (homeSection) {
+        homeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+/**
+ * Hide the loading spinner once the iframe content has loaded
+ */
+function handleFormIframeLoad() {
+    const formIframe = document.getElementById('formIframe');
+    const formLoading = document.getElementById('formLoading');
+    if (formIframe.src === 'about:blank') return;
+    formLoading.classList.remove('active');
+    formIframe.classList.add('loaded');
+}
+
+/**
+ * Friendly labels for each form type, shown in the modal header
+ */
+const FORM_LABELS = {
+    signIn: 'AC Mtaani Sign In',
+    studyUSA: 'Study USA',
+    englishClasses: 'English Classes',
+    programs: 'Upcoming Programs Sign Up',
+    attendance: 'Program Attendance',
+    feedback: 'Feedback',
+    request: 'Request & Return',
+    volunteer: 'Volunteer Sign Up'
+};
+
+/**
  * Navigate to a Google Form based on the form type
  * @param {string} formType - The type of form to navigate to
  */
 function navigateToForm(formType) {
     const url = FORM_URLS[formType];
     if (url) {
-        // Add a subtle animation feedback
         showNavigatingFeedback();
-        
-        // Open in new tab for better UX on tablets
-        window.open(url, '_blank', 'noopener,noreferrer');
+        openFormModal(url, FORM_LABELS[formType]);
     } else {
         console.warn(`Form URL not found for: ${formType}`);
         alert('This form is being set up. Please check back soon!');
@@ -75,10 +175,11 @@ function navigateToForm(formType) {
 /**
  * Navigate to an event's RSVP form
  * @param {string} url - The RSVP form URL
+ * @param {string} title - The event title, used as the modal header
  */
-function navigateToEventRSVP(url) {
+function navigateToEventRSVP(url, title) {
     if (url) {
-        window.open(url, '_blank', 'noopener,noreferrer');
+        openFormModal(url, title ? `RSVP — ${title}` : 'RSVP');
     }
 }
 
@@ -158,6 +259,10 @@ function closeModalOnOverlay(event) {
         if (contactModal.classList.contains('active')) {
             closeContactModal();
         }
+        const formModal = document.getElementById('formModal');
+        if (formModal && formModal.classList.contains('active')) {
+            closeFormModal();
+        }
     }
 }
 
@@ -169,6 +274,10 @@ function handleEscapeKey(event) {
     if (event.key === 'Escape') {
         closeEventsModal();
         closeContactModal();
+        const formModal = document.getElementById('formModal');
+        if (formModal && formModal.classList.contains('active')) {
+            closeFormModal();
+        }
     }
 }
 
@@ -236,7 +345,7 @@ function createEventCard(event) {
             </div>
             <span class="event-category">${escapeHtml(event.category)}</span>
             <p class="event-description">${escapeHtml(event.description)}</p>
-            <button class="event-rsvp-btn" onclick="navigateToEventRSVP('${event.rsvpUrl}')">
+            <button class="event-rsvp-btn" onclick="navigateToEventRSVP('${event.rsvpUrl}', '${escapeHtml(event.title).replace(/'/g, "\\'")}')">
                 RSVP Now
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
