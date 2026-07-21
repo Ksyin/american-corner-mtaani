@@ -10,8 +10,8 @@ const FORM_URLS = {
     signIn: "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform?usp=sf_link",
     studyUSA: "https://docs.google.com/forms/d/e/YOUR_STUDYUSA_FORM_ID/viewform",
     englishClasses: "https://docs.google.com/forms/d/e/YOUR_ENGLISH_FORM_ID/viewform",
-    programs: "https://docs.google.com/forms/d/19Vy74GI68ibyHoO0j8MrRng9MgQrbWC89ukxdyRWx1s/preview",
-    attendance: "https://docs.google.com/forms/d/1izqLJV0DEJhmOv2ATW3NjBNV9TTIz3hAbNGG4ROVbS8/preview",
+    programs: "https://forms.gle/9bu7kixT5fFNND",
+    attendance: "https://forms.gle/9bu7kixT5fFNND",
     feedback: "https://docs.google.com/forms/d/e/1FAIpQLScH6nT4k8ASch8slJOvTqgsD59NblRcJ5XfMYtyQCrDCPCjQw/viewform",
     request: "https://docs.google.com/forms/d/1nNl6vDeOheQKtZMH1lbmoCuysHbRIYggL1AS-c2mneQ/preview",
     volunteer: "https://docs.google.com/forms/d/1iI5v0dLyxGY_SzRtfdBHTu43JORBHlUZZmMtf6TeMws/preview"
