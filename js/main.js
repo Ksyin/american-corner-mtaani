@@ -6,12 +6,6 @@
 // =====================================================
 // Configuration - Update these URLs with your actual Google Form URLs
 // =====================================================
-// =====================================================
-// Configuration - Update these URLs with your actual Google Form URLs
-// =====================================================
-// =====================================================
-// Configuration - Update these URLs with your actual Google Form URLs
-// =====================================================
 const FORM_URLS = {
     signIn: "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform?usp=sf_link",
     studyUSA: "https://docs.google.com/forms/d/e/YOUR_STUDYUSA_FORM_ID/viewform",
@@ -37,7 +31,6 @@ const eventsData = [
         location: "KNLS Upper Hill, Nairobi",
         description: "Learn practical skills in Business Planning, Business Model Canvas, Customer Management & Growth Hacking. Get a mentorship certificate & job opportunities! KNLS in partnership with BrighterMonday Kenya.",
         category: "Entrepreneurship",
-        // Poster image - place this file in the same folder as index.html (or update path to match its actual location)
         image: "https://res.cloudinary.com/ygairs70/image/upload/v1783676730/tech_program_uwhovv.png",
         rsvpUrl: "https://forms.gle/9bu7kixT5fFNND"
     }
@@ -56,13 +49,6 @@ const eventsContainer = document.getElementById('eventsContainer');
 
 /**
  * Convert a Google Form URL into an embeddable version.
- * - "/viewform" links: add embedded=true so Google strips its own chrome.
- * - "/preview" links: these are owner-only edit-preview links and will
- *   NOT record real responses. We still embed them so they display,
- *   but flag it in the console — swap these for the real public
- *   "viewform" link from Google Forms > Send > Link.
- * @param {string} url
- * @returns {string}
  */
 function toEmbeddableFormUrl(url) {
     if (!url) return url;
@@ -95,6 +81,12 @@ function openFormModal(url, label) {
     const formTitleText = document.getElementById('formModalTitleText');
     const formLoading = document.getElementById('formLoading');
 
+    if (!formModal || !formIframe || !formTitleText || !formLoading) {
+        console.error('Form modal elements are missing from the page. Opening form in a new tab instead.');
+        window.open(url, '_blank');
+        return;
+    }
+
     formTitleText.textContent = label || 'Form';
     formLoading.classList.add('active');
     formIframe.classList.remove('loaded');
@@ -115,15 +107,14 @@ function openFormModal(url, label) {
 function closeFormModal() {
     const formModal = document.getElementById('formModal');
     const formIframe = document.getElementById('formIframe');
+    if (!formModal || !formIframe) return;
 
     formModal.classList.remove('active');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', handleEscapeKey);
 
-    // Stop the iframe and clear it so a re-open always starts fresh
     formIframe.src = 'about:blank';
 
-    // Land back on the homepage/dashboard section
     const homeSection = document.getElementById('events');
     if (homeSection) {
         homeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -138,6 +129,7 @@ function closeFormModal() {
 function handleFormIframeLoad() {
     const formIframe = document.getElementById('formIframe');
     const formLoading = document.getElementById('formLoading');
+    if (!formIframe || !formLoading) return;
     if (formIframe.src === 'about:blank') return;
     formLoading.classList.remove('active');
     formIframe.classList.add('loaded');
@@ -174,8 +166,6 @@ function navigateToForm(formType) {
 
 /**
  * Navigate to an event's RSVP form
- * @param {string} url - The RSVP form URL
- * @param {string} title - The event title, used as the modal header
  */
 function navigateToEventRSVP(url, title) {
     if (url) {
@@ -187,7 +177,6 @@ function navigateToEventRSVP(url, title) {
  * Show a brief visual feedback when navigating
  */
 function showNavigatingFeedback() {
-    // You could add a loading overlay or toast notification here
     console.log('Navigating to form...');
 }
 
@@ -195,62 +184,43 @@ function showNavigatingFeedback() {
 // Modal Functions
 // =====================================================
 
-/**
- * Open the events modal and render events
- */
 function openEventsModal() {
     renderEvents();
     eventsModal.classList.add('active');
     document.body.classList.add('modal-open');
-    
-    // Focus trap - focus the close button
+
     const closeBtn = eventsModal.querySelector('.modal-close');
     if (closeBtn) {
         closeBtn.focus();
     }
-    
-    // Add escape key listener
+
     document.addEventListener('keydown', handleEscapeKey);
 }
 
-/**
- * Close the events modal
- */
 function closeEventsModal() {
     eventsModal.classList.remove('active');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', handleEscapeKey);
 }
 
-/**
- * Open the contact modal
- */
 function openContactModal() {
     contactModal.classList.add('active');
     document.body.classList.add('modal-open');
-    
-    // Focus trap
+
     const closeBtn = contactModal.querySelector('.modal-close');
     if (closeBtn) {
         closeBtn.focus();
     }
-    
+
     document.addEventListener('keydown', handleEscapeKey);
 }
 
-/**
- * Close the contact modal
- */
 function closeContactModal() {
     contactModal.classList.remove('active');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', handleEscapeKey);
 }
 
-/**
- * Close modal when clicking on overlay (outside modal content)
- * @param {Event} event - Click event
- */
 function closeModalOnOverlay(event) {
     if (event.target.classList.contains('modal-overlay')) {
         if (eventsModal.classList.contains('active')) {
@@ -266,10 +236,6 @@ function closeModalOnOverlay(event) {
     }
 }
 
-/**
- * Handle escape key to close modals
- * @param {KeyboardEvent} event - Keyboard event
- */
 function handleEscapeKey(event) {
     if (event.key === 'Escape') {
         closeEventsModal();
@@ -285,13 +251,9 @@ function handleEscapeKey(event) {
 // Events Rendering
 // =====================================================
 
-/**
- * Render all events in the modal
- */
 function renderEvents() {
-    // Filter to show only upcoming events
     const upcomingEvents = filterUpcomingEvents(eventsData);
-    
+
     if (upcomingEvents.length === 0) {
         eventsContainer.innerHTML = `
             <div class="no-events">
@@ -302,25 +264,15 @@ function renderEvents() {
         `;
         return;
     }
-    
+
     const eventsHTML = upcomingEvents.map(event => createEventCard(event)).join('');
     eventsContainer.innerHTML = eventsHTML;
 }
 
-/**
- * Filter events to show only upcoming ones
- * @param {Array} events - Array of event objects
- * @returns {Array} - Filtered array of upcoming events
- */
 function filterUpcomingEvents(events) {
     return events.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
 }
 
-/**
- * Create HTML for a single event card
- * @param {Object} event - Event object
- * @returns {string} - HTML string for the event card
- */
 function createEventCard(event) {
     const posterHTML = event.image ? `
             <div class="event-poster">
@@ -353,11 +305,6 @@ function createEventCard(event) {
     `;
 }
 
-/**
- * Escape HTML to prevent XSS attacks
- * @param {string} text - Text to escape
- * @returns {string} - Escaped text
- */
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
@@ -368,12 +315,9 @@ function escapeHtml(text) {
 // Card Interaction Handlers
 // =====================================================
 
-/**
- * Handle keyboard navigation for cards
- */
 function setupCardKeyboardNavigation() {
     const cards = document.querySelectorAll('.dashboard-card');
-    
+
     cards.forEach(card => {
         card.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
@@ -388,22 +332,19 @@ function setupCardKeyboardNavigation() {
 // Header Scroll Effect
 // =====================================================
 
-/**
- * Add shadow to header on scroll
- */
 function setupHeaderScroll() {
     const header = document.getElementById('header');
     let lastScrollY = window.scrollY;
-    
+
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
-        
+
         if (currentScrollY > 10) {
             header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
         } else {
             header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
         }
-        
+
         lastScrollY = currentScrollY;
     }, { passive: true });
 }
@@ -412,28 +353,20 @@ function setupHeaderScroll() {
 // Touch Device Optimizations
 // =====================================================
 
-/**
- * Detect if device supports touch
- * @returns {boolean}
- */
 function isTouchDevice() {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 }
 
-/**
- * Setup touch optimizations for cards
- */
 function setupTouchOptimizations() {
     if (isTouchDevice()) {
         document.body.classList.add('touch-device');
-        
-        // Add active state feedback for touch
+
         const cards = document.querySelectorAll('.dashboard-card');
         cards.forEach(card => {
             card.addEventListener('touchstart', () => {
                 card.style.transform = 'scale(0.98)';
             }, { passive: true });
-            
+
             card.addEventListener('touchend', () => {
                 card.style.transform = '';
             }, { passive: true });
@@ -445,9 +378,6 @@ function setupTouchOptimizations() {
 // Service Worker Registration (for offline support - optional)
 // =====================================================
 
-/**
- * Register service worker for offline capabilities
- */
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -466,27 +396,17 @@ function registerServiceWorker() {
 // Initialization
 // =====================================================
 
-/**
- * Initialize all functionality when DOM is ready
- */
 function init() {
     console.log('American Corner Mtaani Dashboard Initialized');
-    
-    // Setup keyboard navigation
+
     setupCardKeyboardNavigation();
-    
-    // Setup header scroll effect
     setupHeaderScroll();
-    
-    // Setup touch optimizations
     setupTouchOptimizations();
-    
-    // Log current date for debugging
+
     console.log('Current Date:', new Date().toLocaleDateString());
     console.log('Upcoming Events:', filterUpcomingEvents(eventsData).length);
 }
 
-// Run initialization when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
@@ -497,28 +417,21 @@ if (document.readyState === 'loading') {
 // Utility Functions for Admin Use
 // =====================================================
 
-/**
- * Add a new event (for console use by admins)
- * @param {Object} eventData - New event data
- */
 window.addEvent = function(eventData) {
     const requiredFields = ['title', 'date', 'month', 'day', 'time', 'description', 'category', 'rsvpUrl'];
     const missingFields = requiredFields.filter(field => !eventData[field]);
-    
+
     if (missingFields.length > 0) {
         console.error('Missing required fields:', missingFields);
         return false;
     }
-    
+
     eventData.id = eventsData.length + 1;
     eventsData.push(eventData);
     console.log('Event added successfully:', eventData.title);
     return true;
 };
 
-/**
- * List all events (for console use)
- */
 window.listEvents = function() {
     console.table(eventsData.map(e => ({
         ID: e.id,
@@ -529,14 +442,6 @@ window.listEvents = function() {
     })));
 };
 
-
-
-
-/**
- * Update form URLs (for console use)
- * @param {string} formType - Type of form
- * @param {string} url - New URL
- */
 window.updateFormUrl = function(formType, url) {
     if (FORM_URLS.hasOwnProperty(formType)) {
         FORM_URLS[formType] = url;
@@ -553,7 +458,8 @@ window.updateFormUrl = function(formType, url) {
 console.log('%c American Corner Mtaani ', 'background: #0a2240; color: white; font-size: 16px; padding: 8px 16px; border-radius: 4px;');
 console.log('%c Dashboard v1.0.0 ', 'color: #2260a9; font-size: 12px;');
 console.log('Need help? Contact: americancornermtaani@gmail.com');
-// Staff Login Navigation (you can change the URL later)
+
+// Staff Login Navigation
 function navigateToStaffLogin() {
     window.open("https://acmtaanihub.lovable.app/auth/", "_blank");
 }
@@ -562,10 +468,26 @@ function navigateToStaffLogin() {
 document.addEventListener('DOMContentLoaded', function() {
     const nav = document.querySelector('.nav');
     const toggle = document.getElementById('nav-toggle');
-    
+
     if (nav && toggle) {
         toggle.addEventListener('click', () => {
             nav.classList.toggle('open');
         });
     }
 });
+
+// Quick sign-in function for QR scanner
+function quickSignInWithQR() {
+    const signInUrl = "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform";
+    window.open(signInUrl, '_blank');
+
+    const qrElement = document.querySelector('.hero-qr-scanner');
+    if (qrElement) {
+        qrElement.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            qrElement.style.transform = '';
+        }, 150);
+    }
+
+    console.log('QR Scanner clicked - Opening sign-in form for quick attendance');
+}
