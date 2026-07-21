@@ -6,25 +6,23 @@
     <meta name="description" content="American Corner Mtaani - Your Gateway to American Resources, Education & Opportunities at KNLS Nairobi, Kenya">
     <meta name="theme-color" content="#0a2240">
     <title>American Corner Mtaani | KNLS Nairobi</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/favicon.png">
-    
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <!-- Header -->
-<!-- Updated Sticky Header -->
-<!-- Header with Improved Hamburger Menu -->
 <header class="topbar" id="header">
     <div class="container">
         <div class="topbar-inner">
@@ -35,7 +33,7 @@
                     <small>KNLS Nairobi • American Spaces Kenya</small>
                 </div>
             </a>
-            
+
             <nav class="nav" id="main-nav">
                 <div class="nav-links" id="site-nav">
                     <a href="#about">About Us</a>
@@ -67,7 +65,7 @@
     </div>
 
     <div class="hero-overlay"></div>
-    
+
     <div class="hero-content">
         <div class="hero-badge">
             <i class="fas fa-flag-usa"></i>
@@ -76,14 +74,14 @@
         <h2 class="hero-title">Welcome to American Corner Mtaani</h2>
 <h3 class="hero-tagline">CONNECT.CREATE.COLLABORATE</h3>
     </div>
-    
+
     <!-- ========== QR CODE SCANNER IMAGE - Fixed Position Overlay ========== -->
     <div class="hero-qr-scanner" onclick="quickSignInWithQR()" title="Tap to scan QR code & sign in instantly">
         <div class="qr-scanner-inner">
             <div class="qr-pulse-ring"></div>
-<img 
+<img
   src="https://res.cloudinary.com/dzghdog3m/image/upload/f_auto,q_auto/me_hxcpxz.jpg"
-  alt="QR Code Scanner - Quick Sign In" 
+  alt="QR Code Scanner - Quick Sign In"
   class="qr-scanner-image">
 
               <div class="qr-scanner-label">
@@ -93,7 +91,7 @@
             <div class="qr-scan-line"></div>
         </div>
     </div>
-    
+
     <div class="hero-wave">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
             <path fill="#f8fafc" d="M0,50 C360,100 1080,0 1440,50 L1440,100 L0,100 Z"></path>
@@ -163,7 +161,6 @@
     color: var(--primary-blue, #2260a9);
 }
 
-/* Scanning line animation */
 .qr-scan-line {
     position: absolute;
     bottom: 0;
@@ -174,7 +171,6 @@
     animation: scanMove 2s linear infinite;
 }
 
-/* Pulse ring effect */
 .qr-pulse-ring {
     position: absolute;
     top: 50%;
@@ -188,19 +184,16 @@
     animation: pulseRing 1.8s ease-out infinite;
 }
 
-/* Floating animation */
 @keyframes floatQR {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-8px); }
 }
 
-/* Scan line animation */
 @keyframes scanMove {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
 }
 
-/* Pulse ring */
 @keyframes pulseRing {
     0% {
         box-shadow: 0 0 0 0 rgba(34, 96, 169, 0.5);
@@ -216,29 +209,28 @@
     }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .hero-qr-scanner {
         bottom: 70px;
         right: 20px;
     }
-    
+
     .qr-scanner-image {
         width: 80px;
         height: 80px;
         padding: 6px;
     }
-    
+
     .qr-scanner-inner {
         padding: 10px 12px 8px 12px;
         border-radius: 22px;
     }
-    
+
     .qr-scanner-label {
         font-size: 0.7rem;
         gap: 4px;
     }
-    
+
     .qr-scanner-label i {
         font-size: 0.8rem;
     }
@@ -249,43 +241,109 @@
         bottom: 50px;
         right: 12px;
     }
-    
+
     .qr-scanner-image {
         width: 65px;
         height: 65px;
     }
-    
+
     .qr-scanner-inner {
         padding: 8px 10px 6px 10px;
     }
-    
+
     .qr-scanner-label {
         font-size: 0.65rem;
     }
 }
 
-/* For tablets */
 @media (min-width: 769px) and (max-width: 1024px) {
     .hero-qr-scanner {
         bottom: 85px;
         right: 30px;
     }
-    
+
     .qr-scanner-image {
         width: 95px;
         height: 95px;
     }
+}
+
+/* ===== Form Modal (was missing — this is what caused Sign In / Attendance to silently fail) ===== */
+.modal-form .modal {
+    width: min(720px, 94vw);
+    height: min(760px, 90vh);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.form-modal-body {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+}
+
+#formIframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+#formIframe.loaded {
+    opacity: 1;
+}
+
+.form-loading {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #fff;
+    color: var(--primary-navy, #0a2240);
+}
+
+.form-loading.active {
+    display: flex;
+}
+
+.form-loading i {
+    font-size: 2rem;
+    animation: formSpin 1s linear infinite;
+}
+
+@keyframes formSpin {
+    to { transform: rotate(360deg); }
+}
+
+.form-modal-footer {
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.form-modal-footer a {
+    color: var(--primary-blue, #2260a9);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.form-modal-footer a:hover {
+    text-decoration: underline;
 }
 </style>
 
 <script>
 // Quick sign-in function for QR scanner
 function quickSignInWithQR() {
-    // Direct sign-in form URL - opens instantly for fast check-in
     const signInUrl = "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform";
     window.open(signInUrl, '_blank');
-    
-    // Optional: Add a subtle haptic feedback simulation
+
     const qrElement = document.querySelector('.hero-qr-scanner');
     if (qrElement) {
         qrElement.style.transform = 'scale(0.95)';
@@ -293,20 +351,16 @@ function quickSignInWithQR() {
             qrElement.style.transform = '';
         }, 150);
     }
-    
-    // Console log for tracking (optional)
+
     console.log('QR Scanner clicked - Opening sign-in form for quick attendance');
 }
 </script>
 
-
-
-    <!-- Main Dashboard (now id="events" so Programs & Events nav scrolls here) -->
     <!-- Main Dashboard -->
 <main class="dashboard" id="events">
     <div class="dashboard-container">
         <h2 class="dashboard-heading">What would you like to do today?</h2>
-        
+
         <div class="cards-grid cards-grid-three">
             <!-- Card 1: Sign In -->
             <div class="dashboard-card" onclick="navigateToForm('signIn')" tabindex="0" role="button" aria-label="Sign In to American Corner">
@@ -386,7 +440,7 @@ function quickSignInWithQR() {
 </main>
 
 
-    <!-- NEW: About Us Section -->
+    <!-- About Us Section -->
     <section id="about" class="about-section">
         <div class="about-container">
             <div class="section-header">
@@ -399,12 +453,11 @@ function quickSignInWithQR() {
             </div>
 
             <div class="about-grid">
-                <!-- Text Content -->
                 <div class="about-text">
                     <p><strong>American Corner Mtaani</strong> is your local gateway to American resources, education, culture, and opportunities. Located inside the Kenya National Library Service (KNLS) Maktaba Kuu Building on Ngong Road, Upper Hill, Nairobi, it is one of several American Spaces across Kenya.</p>
-                    
+
                     <p><strong>Fully funded by the American people</strong> through the U.S. Department of State and the U.S. Embassy Nairobi, we provide <strong>free access</strong> to information, technology, and programs that empower Kenyans to connect, create, and collaborate.</p>
-                    
+
                     <div class="about-highlights">
                         <div class="highlight-item">
                             <i class="fas fa-hand-holding-heart"></i>
@@ -429,29 +482,28 @@ function quickSignInWithQR() {
                         </div>
                     </div>
 
-                    <p>Whether you’re a student, entrepreneur, researcher, teacher, or community leader — American Corner Mtaani is <strong>your space</strong> to learn, grow, and connect with the world.</p>
-                    
+                    <p>Whether you're a student, entrepreneur, researcher, teacher, or community leader — American Corner Mtaani is <strong>your space</strong> to learn, grow, and connect with the world.</p>
+
                     <a href="#events" class="btn-primary">Explore Our Programs →</a>
                 </div>
 
-             <!-- Pictures / Visuals -->
-<div class="about-visuals">
+             <div class="about-visuals">
     <div class="visual-stack">
 
-        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776928416/caro_cptdsu.jpg" 
-             alt="American Corner Mtaani Logo" 
+        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776928416/caro_cptdsu.jpg"
+             alt="American Corner Mtaani Logo"
              class="about-img main-logo">
 
-        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776929002/north_uqclti.jpg" 
-             alt="Students using technology at American Corner" 
+        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776929002/north_uqclti.jpg"
+             alt="Students using technology at American Corner"
              class="about-img">
 
-        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776932779/team_xiqt1w.jpg" 
-             alt="Community event at American Corner Mtaani" 
+        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776932779/team_xiqt1w.jpg"
+             alt="Community event at American Corner Mtaani"
              class="about-img">
 
-        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776929023/mwingi_ic0kec.jpg" 
-             alt="3D printing workshop" 
+        <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776929023/mwingi_ic0kec.jpg"
+             alt="3D printing workshop"
              class="about-img">
 
     </div>
@@ -459,7 +511,8 @@ function quickSignInWithQR() {
             </div>
         </div>
     </section>
-    <!-- NEW: Resources Section -->
+
+    <!-- Resources Section -->
     <section id="resources" class="resources-section">
         <div class="resources-container">
             <div class="section-header">
@@ -512,7 +565,7 @@ function quickSignInWithQR() {
         </div>
     </section>
 
-<!-- NEW: Gallery Section (beautiful image catalogue) -->
+<!-- Gallery Section -->
 <section id="gallery" class="gallery-section">
     <div class="gallery-container">
         <div class="section-header">
@@ -522,7 +575,6 @@ function quickSignInWithQR() {
 
         <div class="gallery-grid">
 
-            <!-- Image 1 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776929045/shop_aacy3w.jpg" alt="Students exploring technology" loading="lazy">
                 <div class="gallery-overlay">
@@ -531,7 +583,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 2 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776929006/business_uqxgui.jpg" alt="Entrepreneurship training" loading="lazy">
                 <div class="gallery-overlay">
@@ -540,7 +591,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 3 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776929026/threed_ctt83p.jpg" alt="3D printing" loading="lazy">
                 <div class="gallery-overlay">
@@ -549,7 +599,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 4 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776929042/mismumo_upcq7j.jpg" alt="Podcast studio" loading="lazy">
                 <div class="gallery-overlay">
@@ -558,7 +607,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 5 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776929025/mzungu_yjr58f.jpg" alt="Community event" loading="lazy">
                 <div class="gallery-overlay">
@@ -567,7 +615,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 6 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776928877/corner_fny6ou.jpg" alt="Apple workstations" loading="lazy">
                 <div class="gallery-overlay">
@@ -576,7 +623,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 7 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776928877/corner_fny6ou.jpg" alt="Library reading" loading="lazy">
                 <div class="gallery-overlay">
@@ -585,7 +631,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 8 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776929042/teacher_dntz0i.jpg" alt="Group activity" loading="lazy">
                 <div class="gallery-overlay">
@@ -594,7 +639,6 @@ function quickSignInWithQR() {
                 </div>
             </div>
 
-            <!-- Image 9 -->
             <div class="gallery-item">
                 <img src="https://res.cloudinary.com/dzghdog3m/image/upload/v1776929056/open_wqctzl.jpg" alt="Event crowd" loading="lazy">
                 <div class="gallery-overlay">
@@ -607,7 +651,7 @@ function quickSignInWithQR() {
     </div>
 </section>
 
-    <!-- Info Section (kept exactly as original) -->
+    <!-- Info Section -->
     <section class="info-section">
         <div class="info-container">
             <div class="info-card">
@@ -637,7 +681,7 @@ function quickSignInWithQR() {
         </div>
     </section>
 
-    <!-- Events Modal (unchanged) -->
+    <!-- Events Modal -->
     <div class="modal-overlay" id="eventsModal" onclick="closeModalOnOverlay(event)">
         <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
             <div class="modal-header">
@@ -658,7 +702,7 @@ function quickSignInWithQR() {
         </div>
     </div>
 
-    <!-- Contact Modal (unchanged) -->
+    <!-- Contact Modal -->
     <div class="modal-overlay" id="contactModal" onclick="closeModalOnOverlay(event)">
         <div class="modal modal-contact" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
             <div class="modal-header">
@@ -721,14 +765,36 @@ function quickSignInWithQR() {
         </div>
     </div>
 
-    <!-- Footer (unchanged) -->
+    <!-- Form Modal — THIS WAS MISSING FROM THE PAGE, WHICH BROKE EVERY navigateToForm() CALL -->
+    <div class="modal-overlay modal-form" id="formModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="formModalTitleText">
+            <div class="modal-header">
+                <h2 id="formModalTitleText">Form</h2>
+                <button class="modal-close" onclick="closeFormModal()" aria-label="Close form">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="form-modal-body">
+                <div class="form-loading" id="formLoading">
+                    <i class="fa-solid fa-spinner"></i>
+                    <p>Loading form…</p>
+                </div>
+                <iframe id="formIframe" src="about:blank" title="Form" onload="handleFormIframeLoad()"></iframe>
+            </div>
+            <div class="form-modal-footer">
+                <p>Form not loading? <a id="formOpenNewTab" href="#" target="_blank" rel="noopener">Open it in a new tab</a> instead.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-main">
               <div class="footer-brand">
-    <img 
-        src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776928871/American_vlldq3.png" 
-        alt="American Corner Mtaani Logo" 
+    <img
+        src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776928871/American_vlldq3.png"
+        alt="American Corner Mtaani Logo"
         class="logo-img"
         loading="lazy"
     />
@@ -738,18 +804,18 @@ function quickSignInWithQR() {
     </div>
 </div>
                  <div class="footer-brand">
-    <img 
-        src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776932542/Logos_wbwbgd.jpg" 
-        alt="Thrive and Lead Summit Logo" 
+    <img
+        src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776932542/Logos_wbwbgd.jpg"
+        alt="Thrive and Lead Summit Logo"
         class="logo-img"
         loading="lazy"
     />
 </div>
 
 <div class="footer-brand">
-    <img 
-        src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776928872/knls_vi0sfh.png" 
-        alt="Thrive and Lead Summit Logo" 
+    <img
+        src="https://res.cloudinary.com/dzghdog3m/image/upload/q_auto/f_auto/v1776928872/knls_vi0sfh.png"
+        alt="Thrive and Lead Summit Logo"
         class="logo-img"
         loading="lazy"
     />
@@ -778,5 +844,18 @@ function quickSignInWithQR() {
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
+    <script>
+        // Keep the "open in a new tab" fallback link in sync with whatever form is currently open
+        (function() {
+            const iframe = document.getElementById('formIframe');
+            const newTabLink = document.getElementById('formOpenNewTab');
+            if (!iframe || !newTabLink) return;
+            const originalOpenFormModal = window.openFormModal;
+            window.openFormModal = function(url, label) {
+                if (newTabLink) newTabLink.href = url || '#';
+                return originalOpenFormModal(url, label);
+            };
+        })();
+    </script>
 </body>
 </html>
