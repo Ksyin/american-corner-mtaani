@@ -75,14 +75,13 @@
 <h3 class="hero-tagline">CONNECT.CREATE.COLLABORATE</h3>
     </div>
 
-    <!-- ========== QR CODE SCANNER IMAGE - Fixed Position Overlay ========== -->
+    <!-- ========== QR CODE SCANNER - Fixed Position Overlay ==========
+         The QR image itself is generated on the fly (see js/main.js) so it always
+         points at THIS site's Sign In form — no bitly / Google Forms involved. -->
     <div class="hero-qr-scanner" onclick="quickSignInWithQR()" title="Tap to scan QR code & sign in instantly">
         <div class="qr-scanner-inner">
             <div class="qr-pulse-ring"></div>
-<img
-  src="https://res.cloudinary.com/dzghdog3m/image/upload/f_auto,q_auto/me_hxcpxz.jpg"
-  alt="QR Code Scanner - Quick Sign In"
-  class="qr-scanner-image">
+            <div id="qrScannerImage" class="qr-scanner-image" aria-label="QR Code — scan to sign in"></div>
 
               <div class="qr-scanner-label">
                 <i class="fas fa-qrcode"></i>
@@ -135,13 +134,31 @@
 .qr-scanner-image {
     width: 110px;
     height: 110px;
-    object-fit: contain;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 0 auto 6px;
     border-radius: 20px;
     background: white;
     padding: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.qr-scanner-image canvas,
+.qr-scanner-image img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+.qr-scanner-image .qr-loading-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid var(--light-blue, #e8f4fc);
+    border-top-color: var(--primary-blue, #2260a9);
+    animation: formSpin 0.8s linear infinite;
 }
 
 .qr-scanner-label {
@@ -947,6 +964,9 @@ function quickSignInWithQR() {
             </div>
         </div>
     </footer>
+
+    <!-- QR code generator — renders the Sign In QR code locally, no bitly/third-party link shortener -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <!-- Firebase — data goes straight into Realtime Database, nodes auto-create on first write -->
     <script type="module">
