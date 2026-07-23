@@ -503,8 +503,54 @@ function registerServiceWorker() {
 }
 
 // =====================================================
-// Initialization
+// QR Code — generated locally (no bitly / link shortener).
+// The QR encodes a link back to this same page with ?checkin=1,
+// so scanning it with a phone camera opens the Sign In form directly.
 // =====================================================
+
+function getSignInDeepLink() {
+    const url = new URL(window.location.href);
+    url.hash = '';
+    url.searchParams.set('checkin', '1');
+    return url.toString();
+}
+
+function renderSignInQRCode() {
+    const container = document.getElementById('qrScannerImage');
+    if (!container) return;
+
+    if (typeof QRCode === 'undefined') {
+        console.warn('QRCode library not loaded yet — retrying shortly.');
+        setTimeout(renderSignInQRCode, 400);
+        return;
+    }
+
+    container.innerHTML = '';
+    new QRCode(container, {
+        text: getSignInDeepLink(),
+        width: 94,
+        height: 94,
+        colorDark: '#0a2240',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+    });
+}
+
+/**
+ * If the page was opened via the QR code (?checkin=1), open the Sign In
+ * form automatically, then clean the URL so a refresh doesn't re-trigger it.
+ */
+function checkForQRSignIn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('checkin') === '1') {
+        params.delete('checkin');
+        const cleanUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '') + window.location.hash;
+        window.history.replaceState({}, '', cleanUrl);
+        navigateToForm('signIn');
+    }
+}
+
+
 
 function init() {
     console.log('American Corner Mtaani Dashboard Initialized');
@@ -512,6 +558,8 @@ function init() {
     setupCardKeyboardNavigation();
     setupHeaderScroll();
     setupTouchOptimizations();
+    renderSignInQRCode();
+    checkForQRSignIn();
 
     console.log('Current Date:', new Date().toLocaleDateString());
     console.log('Upcoming Events:', filterUpcomingEvents(eventsData).length);
