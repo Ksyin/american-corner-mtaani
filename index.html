@@ -268,10 +268,10 @@
     }
 }
 
-/* ===== Form Modal (was missing — this is what caused Sign In / Attendance to silently fail) ===== */
+/* ===== Form Modal — simple in-page form, no Google Forms / iframe needed ===== */
 .modal-form .modal {
-    width: min(720px, 94vw);
-    height: min(760px, 90vh);
+    width: min(520px, 94vw);
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -281,69 +281,138 @@
     position: relative;
     flex: 1;
     min-height: 0;
+    padding: 24px;
+    overflow-y: auto;
 }
 
-#formIframe {
+.form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-navy, #0a2240);
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
     width: 100%;
-    height: 100%;
-    border: 0;
-    opacity: 0;
-    transition: opacity 0.25s ease;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    color: #1e293b;
+    background: #f8fafc;
+    transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-#formIframe.loaded {
-    opacity: 1;
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-blue, #2260a9);
+    background: #fff;
 }
 
-.form-loading {
-    position: absolute;
-    inset: 0;
-    display: none;
-    flex-direction: column;
+.form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-submit-btn {
+    width: 100%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    background: #fff;
-    color: var(--primary-navy, #0a2240);
+    gap: 10px;
+    background: linear-gradient(135deg, var(--primary-navy, #0a2240) 0%, var(--primary-blue, #2260a9) 100%);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 6px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 6px 16px rgba(34, 96, 169, 0.3);
 }
 
-.form-loading.active {
-    display: flex;
+.form-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(34, 96, 169, 0.4);
 }
 
-.form-loading i {
-    font-size: 2rem;
-    animation: formSpin 1s linear infinite;
+.form-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.form-submit-btn i.fa-spinner {
+    animation: formSpin 0.8s linear infinite;
 }
 
 @keyframes formSpin {
     to { transform: rotate(360deg); }
 }
 
-.form-modal-footer {
-    padding: 10px 20px;
-    text-align: center;
+.form-error {
+    display: none;
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 10px;
+    padding: 10px 14px;
     font-size: 0.85rem;
-    border-top: 1px solid #e5e7eb;
+    margin-bottom: 16px;
 }
 
-.form-modal-footer a {
-    color: var(--primary-blue, #2260a9);
-    font-weight: 600;
-    text-decoration: none;
+.form-error.active {
+    display: block;
 }
 
-.form-modal-footer a:hover {
-    text-decoration: underline;
+.form-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 10px;
+}
+
+.form-success.active {
+    display: flex;
+}
+
+.form-success i {
+    font-size: 3.2rem;
+    color: var(--success-green, #28a745);
+    margin-bottom: 14px;
+}
+
+.form-success h3 {
+    color: var(--primary-navy, #0a2240);
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.form-success p {
+    color: #475569;
+    margin-bottom: 20px;
+}
+
+.form-readonly-note {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: -10px;
+    margin-bottom: 18px;
 }
 </style>
 
 <script>
-// Quick sign-in function for QR scanner
+// Quick sign-in function for QR scanner — opens the local Sign In form (Firebase-backed)
 function quickSignInWithQR() {
-    const signInUrl = "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform";
-    window.open(signInUrl, '_blank');
-
     const qrElement = document.querySelector('.hero-qr-scanner');
     if (qrElement) {
         qrElement.style.transform = 'scale(0.95)';
@@ -352,7 +421,9 @@ function quickSignInWithQR() {
         }, 150);
     }
 
-    console.log('QR Scanner clicked - Opening sign-in form for quick attendance');
+    if (typeof navigateToForm === 'function') {
+        navigateToForm('signIn');
+    }
 }
 </script>
 
@@ -389,7 +460,6 @@ function quickSignInWithQR() {
 
             <!-- Card 3: Program Attendance -->
             <div class="dashboard-card" onclick="navigateToForm('attendance')" tabindex="0" role="button" aria-label="Program Attendance">
-                <div class="card-badge">Program Attendance</div>
                 <div class="card-icon-wrapper">
                     <i class="fa-solid fa-clipboard-check card-icon"></i>
                 </div>
@@ -765,7 +835,7 @@ function quickSignInWithQR() {
         </div>
     </div>
 
-    <!-- Form Modal — THIS WAS MISSING FROM THE PAGE, WHICH BROKE EVERY navigateToForm() CALL -->
+    <!-- Form Modal — simple in-page form, saved straight to Firebase Realtime Database -->
     <div class="modal-overlay modal-form" id="formModal" onclick="closeModalOnOverlay(event)">
         <div class="modal" role="dialog" aria-modal="true" aria-labelledby="formModalTitleText">
             <div class="modal-header">
@@ -775,14 +845,50 @@ function quickSignInWithQR() {
                 </button>
             </div>
             <div class="form-modal-body">
-                <div class="form-loading" id="formLoading">
-                    <i class="fa-solid fa-spinner"></i>
-                    <p>Loading form…</p>
+
+                <!-- Data entry form -->
+                <form id="dataForm" onsubmit="return handleFormSubmit(event)">
+                    <div class="form-error" id="formError"></div>
+
+                    <div class="form-group">
+                        <label for="fieldName">Full Name</label>
+                        <input type="text" id="fieldName" name="name" required placeholder="e.g. Jane Wanjiku" autocomplete="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fieldEmail">Email Address</label>
+                        <input type="email" id="fieldEmail" name="email" required placeholder="you@example.com" autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fieldPhone">Phone Number</label>
+                        <input type="tel" id="fieldPhone" name="phone" required placeholder="e.g. 07XX XXX XXX" autocomplete="tel">
+                    </div>
+
+                    <div class="form-group" id="extraFieldGroup" style="display:none;">
+                        <label for="fieldExtra" id="extraFieldLabel">Details</label>
+                        <textarea id="fieldExtra" name="extra" placeholder=""></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fieldPurpose" id="purposeLabel">Purpose of Visit</label>
+                        <input type="text" id="fieldPurpose" name="purpose" required placeholder="e.g. Study, research, use computers...">
+                    </div>
+
+                    <button type="submit" class="form-submit-btn" id="formSubmitBtn">
+                        <span class="btn-text">Submit</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <!-- Success state -->
+                <div class="form-success" id="formSuccess">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <h3>Thank you!</h3>
+                    <p id="formSuccessMessage">Your submission has been recorded.</p>
+                    <button type="button" class="form-submit-btn" onclick="closeFormModal()">Done</button>
                 </div>
-                <iframe id="formIframe" src="about:blank" title="Form" onload="handleFormIframeLoad()"></iframe>
-            </div>
-            <div class="form-modal-footer">
-                <p>Form not loading? <a id="formOpenNewTab" href="#" target="_blank" rel="noopener">Open it in a new tab</a> instead.</p>
+
             </div>
         </div>
     </div>
@@ -842,20 +948,50 @@ function quickSignInWithQR() {
         </div>
     </footer>
 
+    <!-- Firebase — data goes straight into Realtime Database, nodes auto-create on first write -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+        import {
+            getDatabase,
+            ref,
+            push,
+            set,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfYS7XixiZ33C5ngkW0olYWYbRu4SIDXs",
+            authDomain: "american-corner-mtaani.firebaseapp.com",
+            // NOTE: this is your Realtime Database URL — confirm it matches the one shown
+            // at the top of your Firebase console Database view.
+            databaseURL: "https://american-corner-mtaani-default-rtdb.firebaseio.com",
+            projectId: "american-corner-mtaani",
+            storageBucket: "american-corner-mtaani.firebasestorage.app",
+            messagingSenderId: "491705817529",
+            appId: "1:491705817529:web:ad5ce415c8591955d17e68",
+            measurementId: "G-4SRNF93BJH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+
+        // Exposed for main.js (a classic script) to call.
+        // node: e.g. "signIns", "attendance", "feedback", "requests", "volunteers", "eventRSVPs"
+        // Pushing a new child key auto-creates the node the first time data is written — no manual setup needed.
+        window.submitToFirebase = function (node, data) {
+            const newEntryRef = push(ref(db, node));
+            return set(newEntryRef, {
+                ...data,
+                createdAt: serverTimestamp(),
+                submittedAtLocal: new Date().toISOString()
+            });
+        };
+    </script>
+
     <!-- JavaScript -->
     <script src="js/main.js"></script>
-    <script>
-        // Keep the "open in a new tab" fallback link in sync with whatever form is currently open
-        (function() {
-            const iframe = document.getElementById('formIframe');
-            const newTabLink = document.getElementById('formOpenNewTab');
-            if (!iframe || !newTabLink) return;
-            const originalOpenFormModal = window.openFormModal;
-            window.openFormModal = function(url, label) {
-                if (newTabLink) newTabLink.href = url || '#';
-                return originalOpenFormModal(url, label);
-            };
-        })();
-    </script>
 </body>
 </html>
