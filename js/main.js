@@ -4,17 +4,65 @@
    ===================================================== */
 
 // =====================================================
-// Configuration - Update these URLs with your actual Google Form URLs
+// Form Configuration — each card maps to a Firebase Realtime
+// Database node. Nodes are created automatically the first
+// time data is pushed; nothing to configure in the console.
 // =====================================================
-const FORM_URLS = {
-    signIn: "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform?usp=sf_link",
-    studyUSA: "https://docs.google.com/forms/d/e/YOUR_STUDYUSA_FORM_ID/viewform",
-    englishClasses: "https://docs.google.com/forms/d/e/YOUR_ENGLISH_FORM_ID/viewform",
-    programs: "https://forms.gle/9bu7kixT5fFNND",
-    attendance: "https://forms.gle/9bu7kixT5fFNND",
-    feedback: "https://docs.google.com/forms/d/e/1FAIpQLScH6nT4k8ASch8slJOvTqgsD59NblRcJ5XfMYtyQCrDCPCjQw/viewform",
-    request: "https://docs.google.com/forms/d/1nNl6vDeOheQKtZMH1lbmoCuysHbRIYggL1AS-c2mneQ/preview",
-    volunteer: "https://docs.google.com/forms/d/1iI5v0dLyxGY_SzRtfdBHTu43JORBHlUZZmMtf6TeMws/preview"
+const FORM_CONFIG = {
+    signIn: {
+        title: 'AC Mtaani Sign In',
+        node: 'signIns',
+        purposeLabel: 'Purpose of Visit',
+        purposePlaceholder: 'e.g. Study, research, use computers...',
+        successMessage: "You're signed in. Welcome to American Corner Mtaani!"
+    },
+    attendance: {
+        title: 'Program Attendance',
+        node: 'attendance',
+        purposeLabel: 'Program Attended',
+        purposePlaceholder: 'e.g. Business & Entrepreneurship Training',
+        successMessage: 'Your attendance has been recorded. Thank you!'
+    },
+    feedback: {
+        title: 'Feedback',
+        node: 'feedback',
+        purposeLabel: 'Topic',
+        purposePlaceholder: 'e.g. Program feedback, facility feedback...',
+        extraField: {
+            label: 'Your Feedback',
+            placeholder: 'Tell us about your experience...',
+            key: 'message',
+            required: true
+        },
+        successMessage: 'Thank you for sharing your feedback!'
+    },
+    request: {
+        title: 'Request & Return',
+        node: 'requests',
+        purposeLabel: 'Resource / Item',
+        purposePlaceholder: 'e.g. Book title, laptop, chromebook...',
+        extraField: {
+            label: 'Request Type',
+            placeholder: "Type 'Request' or 'Return'",
+            key: 'requestType',
+            required: true
+        },
+        successMessage: 'Your request has been submitted. Our team will be in touch.'
+    },
+    volunteer: {
+        title: 'Volunteer Sign Up',
+        node: 'volunteers',
+        purposeLabel: 'Area of Interest',
+        purposePlaceholder: 'e.g. Teaching, event support, tech help...',
+        successMessage: 'Thanks for volunteering! We will reach out soon.'
+    },
+    eventRSVP: {
+        title: 'Event RSVP',
+        node: 'eventRSVPs',
+        purposeLabel: 'Event',
+        purposePlaceholder: '',
+        successMessage: "You're on the list! See you at the event."
+    }
 };
 
 // =====================================================
@@ -31,8 +79,7 @@ const eventsData = [
         location: "KNLS Upper Hill, Nairobi",
         description: "Learn practical skills in Business Planning, Business Model Canvas, Customer Management & Growth Hacking. Get a mentorship certificate & job opportunities! KNLS in partnership with BrighterMonday Kenya.",
         category: "Entrepreneurship",
-        image: "https://res.cloudinary.com/ygairs70/image/upload/v1783676730/tech_program_uwhovv.png",
-        rsvpUrl: "https://forms.gle/9bu7kixT5fFNND"
+        image: "https://res.cloudinary.com/ygairs70/image/upload/v1783676730/tech_program_uwhovv.png"
     }
 ];
 
@@ -47,50 +94,79 @@ const eventsContainer = document.getElementById('eventsContainer');
 // Navigation Functions
 // =====================================================
 
-/**
- * Convert a Google Form URL into an embeddable version.
- */
-function toEmbeddableFormUrl(url) {
-    if (!url) return url;
-
-    if (url.includes('/preview')) {
-        console.warn('This form URL is an owner-only preview link and will not save responses:', url);
-    }
-
-    if (url.includes('embedded=true')) {
-        return url;
-    }
-
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}embedded=true`;
-}
+// Track which FORM_CONFIG entry is currently open in the modal, plus any
+// values that should be pre-filled and locked (e.g. an event title for RSVP).
+let activeFormKey = null;
+let activeFormPrefill = null;
 
 /**
- * Open a form inline in the form modal (instead of a new tab)
- * @param {string} url - The form URL
- * @param {string} label - Friendly title shown in the modal header
+ * Build and open the in-page form for a given FORM_CONFIG key.
+ * @param {string} formKey - Key into FORM_CONFIG
+ * @param {Object} [prefill] - Optional { purpose: 'some value', lockPurpose: true }
  */
-function openFormModal(url, label) {
-    if (!url) {
+function openFormModal(formKey, prefill) {
+    const config = FORM_CONFIG[formKey];
+    if (!config) {
+        console.warn(`No form configuration found for: ${formKey}`);
         alert('This form is being set up. Please check back soon!');
         return;
     }
 
     const formModal = document.getElementById('formModal');
-    const formIframe = document.getElementById('formIframe');
     const formTitleText = document.getElementById('formModalTitleText');
-    const formLoading = document.getElementById('formLoading');
+    const dataForm = document.getElementById('dataForm');
+    const formSuccess = document.getElementById('formSuccess');
+    const formError = document.getElementById('formError');
+    const purposeLabel = document.getElementById('purposeLabel');
+    const fieldPurpose = document.getElementById('fieldPurpose');
+    const extraFieldGroup = document.getElementById('extraFieldGroup');
+    const extraFieldLabel = document.getElementById('extraFieldLabel');
+    const fieldExtra = document.getElementById('fieldExtra');
+    const submitBtn = document.getElementById('formSubmitBtn');
 
-    if (!formModal || !formIframe || !formTitleText || !formLoading) {
-        console.error('Form modal elements are missing from the page. Opening form in a new tab instead.');
-        window.open(url, '_blank');
+    if (!formModal || !dataForm || !formSuccess) {
+        console.error('Form modal elements are missing from the page.');
         return;
     }
 
-    formTitleText.textContent = label || 'Form';
-    formLoading.classList.add('active');
-    formIframe.classList.remove('loaded');
-    formIframe.src = toEmbeddableFormUrl(url);
+    activeFormKey = formKey;
+    activeFormPrefill = prefill || null;
+
+    // Reset UI state
+    dataForm.reset();
+    dataForm.style.display = '';
+    formSuccess.classList.remove('active');
+    if (formError) {
+        formError.classList.remove('active');
+        formError.textContent = '';
+    }
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="btn-text">Submit</span><i class="fa-solid fa-arrow-right"></i>';
+    }
+
+    formTitleText.textContent = config.title;
+    purposeLabel.textContent = config.purposeLabel;
+    fieldPurpose.placeholder = config.purposePlaceholder || '';
+
+    if (prefill && prefill.purpose) {
+        fieldPurpose.value = prefill.purpose;
+        fieldPurpose.readOnly = !!prefill.lockPurpose;
+    } else {
+        fieldPurpose.value = '';
+        fieldPurpose.readOnly = false;
+    }
+
+    if (config.extraField) {
+        extraFieldGroup.style.display = '';
+        extraFieldLabel.textContent = config.extraField.label;
+        fieldExtra.placeholder = config.extraField.placeholder || '';
+        fieldExtra.required = !!config.extraField.required;
+    } else {
+        extraFieldGroup.style.display = 'none';
+        fieldExtra.required = false;
+        fieldExtra.value = '';
+    }
 
     formModal.classList.add('active');
     document.body.classList.add('modal-open');
@@ -102,18 +178,93 @@ function openFormModal(url, label) {
 }
 
 /**
- * Close the form modal, reset the iframe, and land back on the homepage
+ * Handle submission of the in-page form: validate, write to Firebase,
+ * then show the success state.
+ */
+function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const config = FORM_CONFIG[activeFormKey];
+    if (!config) return false;
+
+    const dataForm = document.getElementById('dataForm');
+    const formSuccess = document.getElementById('formSuccess');
+    const formSuccessMessage = document.getElementById('formSuccessMessage');
+    const formError = document.getElementById('formError');
+    const submitBtn = document.getElementById('formSubmitBtn');
+
+    const name = document.getElementById('fieldName').value.trim();
+    const email = document.getElementById('fieldEmail').value.trim();
+    const phone = document.getElementById('fieldPhone').value.trim();
+    const purpose = document.getElementById('fieldPurpose').value.trim();
+    const extra = document.getElementById('fieldExtra').value.trim();
+
+    if (!name || !email || !phone || !purpose) {
+        if (formError) {
+            formError.textContent = 'Please fill in all required fields.';
+            formError.classList.add('active');
+        }
+        return false;
+    }
+
+    if (typeof window.submitToFirebase !== 'function') {
+        if (formError) {
+            formError.textContent = 'Unable to connect to the database right now. Please try again in a moment.';
+            formError.classList.add('active');
+        }
+        console.error('window.submitToFirebase is not available yet — check the Firebase module script.');
+        return false;
+    }
+
+    if (formError) {
+        formError.classList.remove('active');
+        formError.textContent = '';
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner"></i><span class="btn-text">Submitting...</span>';
+    }
+
+    const entry = { name, email, phone, purpose };
+    if (config.extraField) {
+        entry[config.extraField.key] = extra;
+    }
+
+    window.submitToFirebase(config.node, entry)
+        .then(() => {
+            dataForm.style.display = 'none';
+            if (formSuccessMessage) formSuccessMessage.textContent = config.successMessage;
+            formSuccess.classList.add('active');
+        })
+        .catch((err) => {
+            console.error('Error saving to Firebase:', err);
+            if (formError) {
+                formError.textContent = 'Something went wrong saving your submission. Please try again.';
+                formError.classList.add('active');
+            }
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="btn-text">Submit</span><i class="fa-solid fa-arrow-right"></i>';
+            }
+        });
+
+    return false;
+}
+
+/**
+ * Close the form modal and land back on the homepage
  */
 function closeFormModal() {
     const formModal = document.getElementById('formModal');
-    const formIframe = document.getElementById('formIframe');
-    if (!formModal || !formIframe) return;
+    if (!formModal) return;
 
     formModal.classList.remove('active');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', handleEscapeKey);
 
-    formIframe.src = 'about:blank';
+    activeFormKey = null;
+    activeFormPrefill = null;
 
     const homeSection = document.getElementById('events');
     if (homeSection) {
@@ -124,60 +275,19 @@ function closeFormModal() {
 }
 
 /**
- * Hide the loading spinner once the iframe content has loaded
- */
-function handleFormIframeLoad() {
-    const formIframe = document.getElementById('formIframe');
-    const formLoading = document.getElementById('formLoading');
-    if (!formIframe || !formLoading) return;
-    if (formIframe.src === 'about:blank') return;
-    formLoading.classList.remove('active');
-    formIframe.classList.add('loaded');
-}
-
-/**
- * Friendly labels for each form type, shown in the modal header
- */
-const FORM_LABELS = {
-    signIn: 'AC Mtaani Sign In',
-    studyUSA: 'Study USA',
-    englishClasses: 'English Classes',
-    programs: 'Upcoming Programs Sign Up',
-    attendance: 'Program Attendance',
-    feedback: 'Feedback',
-    request: 'Request & Return',
-    volunteer: 'Volunteer Sign Up'
-};
-
-/**
- * Navigate to a Google Form based on the form type
+ * Open the in-page form for a given card (signIn, attendance, feedback, request, volunteer)
  * @param {string} formType - The type of form to navigate to
  */
 function navigateToForm(formType) {
-    const url = FORM_URLS[formType];
-    if (url) {
-        showNavigatingFeedback();
-        openFormModal(url, FORM_LABELS[formType]);
-    } else {
-        console.warn(`Form URL not found for: ${formType}`);
-        alert('This form is being set up. Please check back soon!');
-    }
+    openFormModal(formType);
 }
 
 /**
- * Navigate to an event's RSVP form
+ * Navigate to an event's RSVP form (now an in-page form backed by Firebase,
+ * pre-filled and locked to that event's title)
  */
-function navigateToEventRSVP(url, title) {
-    if (url) {
-        openFormModal(url, title ? `RSVP — ${title}` : 'RSVP');
-    }
-}
-
-/**
- * Show a brief visual feedback when navigating
- */
-function showNavigatingFeedback() {
-    console.log('Navigating to form...');
+function navigateToEventRSVP(eventTitle) {
+    openFormModal('eventRSVP', { purpose: eventTitle || '', lockPurpose: true });
 }
 
 // =====================================================
@@ -297,7 +407,7 @@ function createEventCard(event) {
             </div>
             <span class="event-category">${escapeHtml(event.category)}</span>
             <p class="event-description">${escapeHtml(event.description)}</p>
-            <button class="event-rsvp-btn" onclick="navigateToEventRSVP('${event.rsvpUrl}', '${escapeHtml(event.title).replace(/'/g, "\\'")}')">
+            <button class="event-rsvp-btn" onclick="navigateToEventRSVP('${escapeHtml(event.title).replace(/'/g, "\\'")}')">
                 RSVP Now
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -418,7 +528,7 @@ if (document.readyState === 'loading') {
 // =====================================================
 
 window.addEvent = function(eventData) {
-    const requiredFields = ['title', 'date', 'month', 'day', 'time', 'description', 'category', 'rsvpUrl'];
+    const requiredFields = ['title', 'date', 'month', 'day', 'time', 'description', 'category'];
     const missingFields = requiredFields.filter(field => !eventData[field]);
 
     if (missingFields.length > 0) {
@@ -442,13 +552,13 @@ window.listEvents = function() {
     })));
 };
 
-window.updateFormUrl = function(formType, url) {
-    if (FORM_URLS.hasOwnProperty(formType)) {
-        FORM_URLS[formType] = url;
-        console.log(`Updated ${formType} URL to:`, url);
+window.updateFormConfig = function(formType, updates) {
+    if (FORM_CONFIG.hasOwnProperty(formType)) {
+        Object.assign(FORM_CONFIG[formType], updates);
+        console.log(`Updated ${formType} config:`, FORM_CONFIG[formType]);
         return true;
     }
-    console.error('Invalid form type. Available types:', Object.keys(FORM_URLS));
+    console.error('Invalid form type. Available types:', Object.keys(FORM_CONFIG));
     return false;
 };
 
@@ -476,11 +586,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Quick sign-in function for QR scanner
+// Quick sign-in function for QR scanner — opens the local Sign In form (Firebase-backed)
 function quickSignInWithQR() {
-    const signInUrl = "https://docs.google.com/forms/d/e/1FAIpQLScyJrGQjMwthJAHWB2cb7CgKce8sgw6DhwbJvr_R7n_zorhcA/viewform";
-    window.open(signInUrl, '_blank');
-
     const qrElement = document.querySelector('.hero-qr-scanner');
     if (qrElement) {
         qrElement.style.transform = 'scale(0.95)';
@@ -489,5 +596,6 @@ function quickSignInWithQR() {
         }, 150);
     }
 
-    console.log('QR Scanner clicked - Opening sign-in form for quick attendance');
+    navigateToForm('signIn');
+    console.log('QR Scanner clicked - Opening local sign-in form');
 }
